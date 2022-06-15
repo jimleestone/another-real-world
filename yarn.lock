@@ -1332,15 +1332,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/moment@npm:^2.13.0":
-  version: 2.13.0
-  resolution: "@types/moment@npm:2.13.0::__archiveUrl=https%3A%2F%2Fregistry.npmmirror.com%2F%40types%2Fmoment%2F-%2Fmoment-2.13.0.tgz"
-  dependencies:
-    moment: "*"
-  checksum: 0bb9e73c0c961a1112ba67773779c3a84edca5063660e79f8b104bc0857dc53447f93e7ac3df78924d17e7e0a87c9ccc9e87505308798c9495ac6de278af7305
-  languageName: node
-  linkType: hard
-
 "@types/node@npm:*":
   version: 17.0.42
   resolution: "@types/node@npm:17.0.42::__archiveUrl=https%3A%2F%2Fregistry.npmmirror.com%2F%40types%2Fnode%2F-%2Fnode-17.0.42.tgz"
@@ -1370,17 +1361,6 @@ __metadata:
     "@types/jsonwebtoken": "*"
     "@types/passport-strategy": "*"
   checksum: aa1e89b30bf77e1147bd5d47118fec38705246d6789b687d7385f037fdc01bed4d1e222e9d3c5c04e871c9a06474853090c17968434f9affefc53bed4dfad32b
-  languageName: node
-  linkType: hard
-
-"@types/passport-local@npm:^1.0.34":
-  version: 1.0.34
-  resolution: "@types/passport-local@npm:1.0.34::__archiveUrl=https%3A%2F%2Fregistry.npmmirror.com%2F%40types%2Fpassport-local%2F-%2Fpassport-local-1.0.34.tgz"
-  dependencies:
-    "@types/express": "*"
-    "@types/passport": "*"
-    "@types/passport-strategy": "*"
-  checksum: c8e162f571c8685344f4496b1473645eb1244a2ecb1c810854d43ac8897145083ac7412b8d3a3231f72f27a22d57e526fc8421d8208c18cdff8f83266e875f37
   languageName: node
   linkType: hard
 
@@ -2152,10 +2132,8 @@ __metadata:
     "@types/express": ^4.17.13
     "@types/jest": 27.5.0
     "@types/jsonwebtoken": ^8.5.8
-    "@types/moment": ^2.13.0
     "@types/node": ^16.0.0
     "@types/passport-jwt": ^3.0.6
-    "@types/passport-local": ^1.0.34
     "@types/slug": ^5.0.3
     "@types/supertest": ^2.0.11
     "@typescript-eslint/eslint-plugin": ^5.0.0
@@ -2170,10 +2148,8 @@ __metadata:
     jest: 28.0.3
     jsonwebtoken: ^8.5.1
     mo: ^1.7.3
-    moment: ^2.29.3
     passport: ^0.6.0
     passport-jwt: ^4.0.0
-    passport-local: ^1.0.0
     prettier: ^2.3.2
     prisma: ^3.15.1
     reflect-metadata: ^0.1.13
@@ -5333,13 +5309,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"moment@npm:*, moment@npm:^2.29.3":
-  version: 2.29.3
-  resolution: "moment@npm:2.29.3::__archiveUrl=https%3A%2F%2Fregistry.npmmirror.com%2Fmoment%2F-%2Fmoment-2.29.3.tgz"
-  checksum: 2e780e36d9a1823c08a1b6313cbb08bd01ecbb2a9062095820a34f42c878991ccba53abaa6abb103fd5c01e763724f295162a8c50b7e95b4f1c992ef0772d3f0
-  languageName: node
-  linkType: hard
-
 "ms@npm:2.0.0":
   version: 2.0.0
   resolution: "ms@npm:2.0.0::__archiveUrl=https%3A%2F%2Fregistry.npmmirror.com%2Fms%2F-%2Fms-2.0.0.tgz"
@@ -5666,15 +5635,6 @@ __metadata:
     jsonwebtoken: ^8.2.0
     passport-strategy: ^1.0.0
   checksum: d0499ebb819c714d885a9c03a6c5d6dfae916c1a81ccb62357136d5bf477529327e9b8fc658f61f97c565651d2bd78eccec4543474a08e944132f0e2ec47cc3d
-  languageName: node
-  linkType: hard
-
-"passport-local@npm:^1.0.0":
-  version: 1.0.0
-  resolution: "passport-local@npm:1.0.0::__archiveUrl=https%3A%2F%2Fregistry.npmmirror.com%2Fpassport-local%2F-%2Fpassport-local-1.0.0.tgz"
-  dependencies:
-    passport-strategy: 1.x.x
-  checksum: 86dc08b12f05f0ce1bb109780ccb0377eff45bbba70aa9c0d65f092b3ef476d344c0443517db2e9f3e5ec0ca849171ab25fb622164e0f69a677173af42b9bba7
   languageName: node
   linkType: hard
 

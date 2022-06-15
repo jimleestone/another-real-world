@@ -1,0 +1,71 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id         Int       @id @default(autoincrement())
+  bio        String?
+  email      String    @unique
+  image      String?
+  password   String?
+  username   String?   @unique
+  articles   Article[] @relation("UserArticles")
+  favorites  Article[] @relation("UserFavorites", references: [id])
+  followedBy User[]    @relation("UserFollows", references: [id])
+  following  User[]    @relation("UserFollows", references: [id])
+  comments   Comment[]
+
+  @@map("blog_user")
+}
+
+model Article {
+  id          Int       @id @default(autoincrement())
+  slug        String    @unique
+  title       String
+  description String
+  body        String
+  createdAt   DateTime  @default(now()) @map("created_at")
+  updatedAt   DateTime  @default(now()) @map("updated_at")
+  tags        Tag[]     @relation("ArticleTags", references: [id])
+  author      User      @relation("UserArticles", fields: [authorId], references: [id])
+  authorId    Int       @map("author_id")
+  favoritedBy User[]    @relation("UserFavorites", references: [id])
+  comments    Comment[]
+  Tag         Tag[]
+  del         Boolean   @default(false)
+
+  @@map("blog_article")
+}
+
+model Comment {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @default(now()) @map("updated_at")
+  body      String
+  article   Article  @relation(fields: [articleId], references: [id])
+  articleId Int      @map("article_id")
+  author    User     @relation(fields: [authorId], references: [id])
+  authorId  Int      @map("author_id")
+  del       Boolean  @default(false)
+
+  @@map("blog_comment")
+}
+
+model Tag {
+  id       Int       @id @default(autoincrement())
+  name     String    @unique
+  articles Article[] @relation("ArticleTags", references: [id])
+
+  Article   Article? @relation(fields: [articleId], references: [id])
+  articleId Int?
+
+  @@map("blog_tag")
+}
