@@ -1,13 +1,12 @@
 import { Prisma } from '@prisma/client';
 
-export interface ProfileData {
+export class ProfileData {
   username: string;
   bio: string;
-  image?: string;
-  following?: boolean;
+  image: string;
+  following: boolean;
 }
-
-export interface ProfileRO {
+export class ProfileRO {
   profile: ProfileData;
 }
 

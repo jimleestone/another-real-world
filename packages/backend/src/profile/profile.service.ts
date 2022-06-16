@@ -1,7 +1,7 @@
 import { Inject, Injectable, NotFoundException, Scope } from '@nestjs/common';
 import { REQUEST } from '@nestjs/core';
 import { PrismaService } from '../shared/services/prisma.service';
-import { ProfileRO, profileSelect, profileWrapper } from './profile.interface';
+import { ProfileRO, profileSelect, profileWrapper } from './profile.dto';
 
 @Injectable({ scope: Scope.REQUEST })
 export class ProfileService {

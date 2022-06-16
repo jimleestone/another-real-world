@@ -1,34 +1,75 @@
-import { Article, Comment, Prisma } from '@prisma/client';
+import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
+import { Prisma } from '@prisma/client';
 import { Type } from 'class-transformer';
-import { ArrayNotEmpty, IsInt, IsNotEmpty } from 'class-validator';
+import {
+  ArrayNotEmpty,
+  IsInt,
+  IsNotEmpty,
+  IsOptional,
+  IsString,
+  ValidateNested,
+} from 'class-validator';
 import slug from 'slug';
+import { AuthorResponse, authorSelect } from './author.dto';
 
-export interface CommentsRO {
-  comments: Comment[];
+export class ArticleResponse {
+  slug: string;
+  title: string;
+  description: string;
+  body: string;
+  createdAt: Date;
+  updatedAt: Date;
+  author: AuthorResponse;
+  favoritesCount: number;
+  favorited: boolean;
+  tags: string[];
 }
 
-export interface ArticleRO {
-  article: Article;
+export class ArticleRO {
+  article: ArticleResponse;
 }
 
-export interface ArticlesRO {
-  articles: Article[];
+export class ArticlesRO {
+  articles: ArticleResponse[];
   articlesCount: number;
 }
 
 export class ArticleQueryFilter {
+  @ApiPropertyOptional({
+    description: 'search articles with a tag',
+  })
+  @IsOptional()
+  @IsString()
   tag?: string;
 
+  @ApiPropertyOptional({
+    description: 'Search articles with a specified author',
+  })
+  @IsOptional()
+  @IsString()
   author?: string;
 
+  @ApiPropertyOptional({
+    description: `search articles within a user's favorites`,
+  })
+  @IsOptional()
+  @IsString()
   favorited?: string;
 
   @IsInt()
   @Type(() => Number)
+  @ApiProperty({
+    default: 20,
+    description: 'return record list size',
+  })
   limit?: number = 20;
 
   @IsInt()
   @Type(() => Number)
+  @ApiProperty({
+    default: 0,
+    description: 'return record list offset',
+  })
   offset?: number = 0;
 }
 
@@ -46,9 +87,10 @@ export class ArticleInput {
   readonly tagList: string[];
 }
 
-export class CreateCommentInput {
-  @IsNotEmpty()
-  readonly body: string;
+export class ArticleInputRO {
+  @ValidateNested()
+  @Type(() => ArticleInput)
+  article: ArticleInput;
 }
 
 export const articleQueryFilter = (query: ArticleQueryFilter) => {
@@ -90,18 +132,7 @@ export const articleSelect = (userId: number) => {
     createdAt: true,
     updatedAt: true,
     author: {
-      select: {
-        username: true,
-        bio: true,
-        image: true,
-        // when not logged in do not query this field
-        followedBy: !!userId && {
-          select: { id: true },
-          where: {
-            id: userId,
-          },
-        },
-      },
+      select: authorSelect(userId),
     },
     favoritedBy: !!userId && {
       select: { id: true },
@@ -114,28 +145,6 @@ export const articleSelect = (userId: number) => {
     },
     tags: {
       select: { name: true },
-    },
-  });
-};
-
-export const commentSelect = (userId: number) => {
-  return Prisma.validator<Prisma.CommentSelect>()({
-    id: true,
-    createdAt: true,
-    updatedAt: true,
-    body: true,
-    author: {
-      select: {
-        username: true,
-        bio: true,
-        image: true,
-        followedBy: !!userId && {
-          select: { id: true },
-          where: {
-            id: userId,
-          },
-        },
-      },
     },
   });
 };
@@ -198,13 +207,6 @@ export const feedQueryFilter = (userId: number) => {
   });
 };
 
-function slugify(title: string) {
-  return `${slug(title, { lower: true })}-${(
-    (Math.random() * Math.pow(36, 6)) |
-    0
-  ).toString(36)}`;
-}
-
 export const articleWrapper = (article) => {
   const { _count, favoritedBy, tags, ...rest } = article;
   const { followedBy, ...authorRest } = article.author;
@@ -220,13 +222,9 @@ export const articleWrapper = (article) => {
   };
 };
 
-export const commentWrapper = (comment) => {
-  const { followedBy, ...authorRest } = comment.author;
-  return {
-    ...comment,
-    author: {
-      ...authorRest,
-      following: Array.isArray(followedBy) && !!followedBy.length,
-    },
-  };
-};
+function slugify(title: string) {
+  return `${slug(title, { lower: true })}-${(
+    (Math.random() * Math.pow(36, 6)) |
+    0
+  ).toString(36)}`;
+}

@@ -7,8 +7,9 @@ import {
 } from '@nestjs/common';
 import { REQUEST } from '@nestjs/core';
 import { Prisma } from '@prisma/client';
+import bcrypt from 'bcryptjs';
 import { PrismaService } from 'src/shared/services/prisma.service';
-import { UpdateUserInput, userSelect } from './user.interface';
+import { UpdateUserInput, userSelect } from './user.dto';
 
 @Injectable({ scope: Scope.REQUEST })
 export class UserService {
@@ -38,11 +39,17 @@ export class UserService {
     return user;
   }
 
-  async update(data: UpdateUserInput): Promise<any> {
+  async update(input: UpdateUserInput): Promise<any> {
     const origin = await this.prisma.user.findUnique({
       where: { id: this.req.user.id },
     });
     if (!origin) throw new NotFoundException('user not found');
+
+    // change password
+    const { password, ...rest } = input;
+    const data = !!password
+      ? { ...rest, password: bcrypt.hashSync(password, bcrypt.genSaltSync(10)) }
+      : input;
 
     let user;
     try {
