@@ -4,7 +4,7 @@ import {
   IsEmail,
   IsNotEmpty,
   IsOptional,
-  IsString,
+  IsUrl,
   ValidateNested,
 } from 'class-validator';
 
@@ -20,25 +20,27 @@ export class UserRO {
 }
 
 export class UpdateUserInput {
-  @IsNotEmpty()
   @IsEmail()
-  readonly email: string;
+  @IsNotEmpty()
+  @IsOptional()
+  readonly email?: string;
 
   @IsNotEmpty()
-  @IsString()
-  readonly username: string;
-
   @IsOptional()
-  @IsString()
-  readonly bio: string;
+  readonly username?: string;
 
+  @IsNotEmpty()
   @IsOptional()
-  @IsString()
-  readonly image: string;
+  readonly bio?: string;
 
+  @IsUrl()
+  @IsNotEmpty()
   @IsOptional()
-  @IsString()
-  readonly password: string;
+  readonly image?: string;
+
+  @IsNotEmpty()
+  @IsOptional()
+  readonly password?: string;
 }
 
 export class UpdateUserInputRO {

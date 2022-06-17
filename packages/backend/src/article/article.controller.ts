@@ -15,6 +15,7 @@ import {
   ArticleQueryFilter,
   ArticleRO,
   ArticlesRO,
+  FeedQueryFilter,
 } from './dto/article.dto';
 import { CommentRO, CommentsRO, CreateCommentInputRO } from './dto/comment.dto';
 import { ArticleService } from './services/article.service';
@@ -40,7 +41,7 @@ export class ArticleController {
 
   @ApiOperation({ summary: 'Get feed articles' })
   @Get('feed')
-  async getFeed(@Query() query: ArticleQueryFilter): Promise<ArticlesRO> {
+  async getFeed(@Query() query: FeedQueryFilter): Promise<ArticlesRO> {
     return await this.articleService.findFeed(query);
   }
 

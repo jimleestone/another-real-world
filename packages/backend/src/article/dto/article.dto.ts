@@ -1,4 +1,3 @@
-import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { Prisma } from '@prisma/client';
 import { Type } from 'class-transformer';
 import {
@@ -6,7 +5,8 @@ import {
   IsInt,
   IsNotEmpty,
   IsOptional,
-  IsString,
+  Max,
+  Min,
   ValidateNested,
 } from 'class-validator';
 import slug from 'slug';
@@ -34,43 +34,48 @@ export class ArticlesRO {
   articlesCount: number;
 }
 
-export class ArticleQueryFilter {
-  @ApiPropertyOptional({
-    description: 'search articles with a tag',
-  })
-  @IsOptional()
-  @IsString()
-  tag?: string;
-
-  @ApiPropertyOptional({
-    description: 'Search articles with a specified author',
-  })
-  @IsOptional()
-  @IsString()
-  author?: string;
-
-  @ApiPropertyOptional({
-    description: `search articles within a user's favorites`,
-  })
-  @IsOptional()
-  @IsString()
-  favorited?: string;
-
+export class FeedQueryFilter {
+  /**
+   * return records size
+   * @default 20
+   */
+  @Max(100)
+  @Min(1)
   @IsInt()
-  @Type(() => Number)
-  @ApiProperty({
-    default: 20,
-    description: 'return record list size',
-  })
+  @Type(() => Number) // this operation would parse ''(empty string) or '  '(white spaces) into 0(number), maybe it is a bug of the class-transformer lib
   limit?: number = 20;
 
+  /**
+   * return records offset
+   * @default 0
+   */
+  @Min(0)
   @IsInt()
   @Type(() => Number)
-  @ApiProperty({
-    default: 0,
-    description: 'return record list offset',
-  })
   offset?: number = 0;
+}
+
+export class ArticleQueryFilter extends FeedQueryFilter {
+  /**
+   * search articles with a tag
+   */
+  @IsNotEmpty()
+  @IsOptional()
+  tag?: string;
+
+  /**
+   * search articles belong to a specified author
+   */
+  @IsNotEmpty()
+  @IsOptional()
+  author?: string;
+
+  /**
+   * search articles within a user's favorites
+   */
+  @IsNotEmpty()
+  @IsOptional()
+  favorited?: string;
 }
 
 export class ArticleInput {

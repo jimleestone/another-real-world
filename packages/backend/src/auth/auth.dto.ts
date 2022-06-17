@@ -1,28 +1,24 @@
 import { Type } from 'class-transformer';
-import { IsEmail, IsNotEmpty, IsString, ValidateNested } from 'class-validator';
+import { IsEmail, IsNotEmpty, ValidateNested } from 'class-validator';
 import { UserData } from 'src/user/user.dto';
 
 export class LoginUserInput {
   @IsNotEmpty()
-  @IsString()
   readonly username: string;
 
   @IsNotEmpty()
-  @IsString()
   readonly password: string;
 }
 
 export class CreateUserInput {
   @IsNotEmpty()
-  @IsString()
   readonly username: string;
 
-  @IsNotEmpty()
   @IsEmail()
+  @IsNotEmpty()
   readonly email: string;
 
   @IsNotEmpty()
-  @IsString()
   readonly password: string;
 }
 

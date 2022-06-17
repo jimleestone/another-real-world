@@ -6,6 +6,7 @@ import {
   articleSelect,
   articleWrapper,
   createArticleInput,
+  FeedQueryFilter,
   feedQueryFilter,
   updateArticleInput,
 } from '../dto/article.dto';
@@ -30,7 +31,7 @@ export class ArticleService extends BaseArticleService {
     return { articles: results, articlesCount };
   }
 
-  async findFeed(query: ArticleQueryFilter): Promise<any> {
+  async findFeed(query: FeedQueryFilter): Promise<any> {
     const queryFilter = feedQueryFilter(this.req.user.id);
     const articles = await this.prisma.article.findMany({
       where: queryFilter,
