@@ -1,5 +1,16 @@
 {
   "compilerOptions": {
+    "assets": [
+      {
+        "include": "../config/*.yml",
+        "outDir": "./dist/config",
+        "watchAssets": true
+      },
+      {
+        "include": "../config/*.pem",
+        "outDir": "./dist"
+      }
+    ],
     "plugins": [
       {
         "name": "@nestjs/swagger",

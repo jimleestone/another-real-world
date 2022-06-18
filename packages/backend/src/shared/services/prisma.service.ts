@@ -4,7 +4,9 @@ import {
   Logger,
   OnModuleInit,
 } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
 import { Prisma, PrismaClient } from '@prisma/client';
+import { EnvType } from 'src/config/config.interface';
 
 @Injectable()
 export class PrismaService
@@ -13,7 +15,7 @@ export class PrismaService
 {
   private readonly logger = new Logger(PrismaService.name);
 
-  constructor() {
+  constructor(private readonly config: ConfigService) {
     super({
       log: [
         {
@@ -40,7 +42,7 @@ export class PrismaService
     this.$on('error', (event) => {
       this.logger.verbose(event.target);
     });
-    if (process.env.NODE_ENV !== 'production') {
+    if (this.config.get<EnvType>('env') !== 'prod') {
       this.$on('query', (event) => {
         this.logger.verbose(
           `[query]: ${event.query}, [params]: ${event.params}`,

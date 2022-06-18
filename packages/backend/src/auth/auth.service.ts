@@ -1,6 +1,6 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
-import bcrypt from 'bcryptjs';
+import Utility from 'src/shared/utils';
 import { UserService } from 'src/user/user.service';
 import { AuthPayload, CreateUserInput, LoginUserInput } from './auth.dto';
 
@@ -16,7 +16,7 @@ export class AuthService {
     if (!user) {
       user = await this.usersService.findByEmail(input.username);
     }
-    if (!user || !bcrypt.compareSync(input.password, user.password)) {
+    if (!user || !Utility.checkPassword(input.password, user.password)) {
       throw new BadRequestException('Bad credentials');
     }
 
@@ -32,7 +32,7 @@ export class AuthService {
   }
 
   async signup(input: CreateUserInput) {
-    const encoded = bcrypt.hashSync(input.password, bcrypt.genSaltSync(10));
+    const encoded = Utility.encodePassword(input.password);
     const user = await this.usersService.create({
       ...input,
       password: encoded,

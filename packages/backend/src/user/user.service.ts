@@ -7,8 +7,8 @@ import {
 } from '@nestjs/common';
 import { REQUEST } from '@nestjs/core';
 import { Prisma } from '@prisma/client';
-import bcrypt from 'bcryptjs';
 import { PrismaService } from 'src/shared/services/prisma.service';
+import Utility from 'src/shared/utils';
 import { UpdateUserInput, userSelect } from './user.dto';
 
 @Injectable({ scope: Scope.REQUEST })
@@ -48,7 +48,7 @@ export class UserService {
     // change password
     const { password, ...rest } = input;
     const data = !!password
-      ? { ...rest, password: bcrypt.hashSync(password, bcrypt.genSaltSync(10)) }
+      ? { ...rest, password: Utility.encodePassword(password) }
       : input;
 
     let user;

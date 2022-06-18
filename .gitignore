@@ -1,3 +1,4 @@
+*.pem
 .yarn/*
 !.yarn/patches
 !.yarn/plugins
