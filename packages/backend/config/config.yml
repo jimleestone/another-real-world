@@ -1,7 +1,7 @@
 env: dev
 
 server:
-  port: 3000
+  port: 4000
   global-prefix: api
 
 database:
@@ -18,7 +18,7 @@ jwt:
 
 throttler:
   ttl: 60
-  limit: 10
+  limit: 60
 
 swagger:
   title: Another Real World

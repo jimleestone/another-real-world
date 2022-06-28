@@ -49,7 +49,7 @@ export class UserService {
     const { password, ...rest } = input;
     const data = !!password
       ? { ...rest, password: Utility.encodePassword(password) }
-      : input;
+      : { ...rest };
 
     let user;
     try {

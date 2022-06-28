@@ -42,7 +42,7 @@ export class PrismaService
     this.$on('error', (event) => {
       this.logger.verbose(event.target);
     });
-    if (this.config.get<EnvType>('env') !== 'prod') {
+    if (this.config.get<EnvType>('env') === 'prod') {
       this.$on('query', (event) => {
         this.logger.verbose(
           `[query]: ${event.query}, [params]: ${event.params}`,

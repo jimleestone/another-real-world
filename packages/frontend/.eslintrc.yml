@@ -1,0 +1,33 @@
+---
+env:
+  browser: true
+  es2020: true
+settings:
+  react:
+    pragma: React
+    version: detect
+extends:
+  - eslint:recommended
+  - plugin:react/recommended
+  - plugin:@typescript-eslint/recommended
+  - plugin:prettier/recommended
+parser: '@typescript-eslint/parser'
+parserOptions:
+  ecmaVersion: 999.999.999
+  sourceType: module
+  ecmaFeatures:
+    jsx: true
+    modules: true
+plugins:
+  - '@typescript-eslint'
+rules:
+  # no-console: error
+  no-debugger: error
+  '@typescript-eslint/explicit-module-boundary-types': off
+  '@typescript-eslint/no-unused-vars': error
+  '@typescript-eslint/no-explicit-any': error
+  '@typescript-eslint/no-empty-function':
+    - error
+    - allow:
+        - methods
+        - arrowFunctions

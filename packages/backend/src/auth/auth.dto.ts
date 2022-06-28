@@ -3,8 +3,9 @@ import { IsEmail, IsNotEmpty, ValidateNested } from 'class-validator';
 import { UserData } from 'src/user/user.dto';
 
 export class LoginUserInput {
+  @IsEmail()
   @IsNotEmpty()
-  readonly username: string;
+  readonly email: string;
 
   @IsNotEmpty()
   readonly password: string;

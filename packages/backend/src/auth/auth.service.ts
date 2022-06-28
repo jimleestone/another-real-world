@@ -12,17 +12,14 @@ export class AuthService {
   ) {}
 
   async login(input: LoginUserInput) {
-    let user = await this.usersService.findByUsername(input.username);
-    if (!user) {
-      user = await this.usersService.findByEmail(input.username);
-    }
+    const user = await this.usersService.findByEmail(input.email);
     if (!user || !Utility.checkPassword(input.password, user.password)) {
       throw new BadRequestException('Bad credentials');
     }
 
     delete user['password'];
     const { id, ...ret } = user;
-    const payload = { user: user.username, sub: id };
+    const payload: AuthPayload = { user: user.username, sub: id };
     return {
       user: {
         ...ret,
