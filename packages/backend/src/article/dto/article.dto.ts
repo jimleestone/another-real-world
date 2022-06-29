@@ -9,7 +9,7 @@ import {
   Min,
   ValidateNested,
 } from 'class-validator';
-import slug from 'slug';
+import Utility from 'src/shared/utils';
 import { AuthorResponse, authorSelect } from './author.dto';
 
 export class ArticleResponse {
@@ -113,14 +113,18 @@ export const articleQueryFilter = (query: ArticleQueryFilter) => {
         favoritedBy: {
           // this "some" operator somehow could not work with the nested undefined value in an "AND" array
           some: query?.favorited && {
-            username: query.favorited,
+            favoritedBy: {
+              username: query.favorited,
+            },
           },
         },
       },
       {
         tags: {
           some: query?.tag && {
-            name: query.tag,
+            tag: {
+              name: query.tag,
+            },
           },
         },
       },
@@ -140,17 +144,13 @@ export const articleSelect = (userId: number) => {
       select: authorSelect(userId),
     },
     favoritedBy: !!userId && {
-      select: { id: true },
-      where: {
-        id: userId,
-      },
+      select: { favoritedBy: true },
+      where: { userId },
     },
     _count: {
       select: { favoritedBy: true },
     },
-    tags: {
-      select: { name: true },
-    },
+    tags: { select: { tag: { select: { name: true } } } },
   });
 };
 
@@ -159,46 +159,46 @@ export const createArticleInput = (userId: number, input: ArticleInput) => {
     title: input.title,
     description: input.description,
     body: input.body,
+    author: {
+      connect: { id: userId },
+    },
+    slug: Utility.slugify(input.title),
     tags: {
-      connectOrCreate: input.tagList.map((name) => {
+      create: input.tagList.map((name) => {
         return {
-          where: {
-            name,
-          },
-          create: {
-            name,
+          tag: {
+            connectOrCreate: {
+              where: { name },
+              create: { name },
+            },
           },
         };
       }),
     },
-    author: {
-      connect: { id: userId },
-    },
-    slug: slugify(input.title),
   });
 };
 
-export const updateArticleInput = (input: ArticleInput) => {
+export const updateArticleInput = (articleId: number, input: ArticleInput) => {
   return Prisma.validator<Prisma.ArticleUpdateInput>()({
     title: input.title,
     description: input.description,
     body: input.body,
     tags: {
       // delete relation
-      set: [],
+      deleteMany: { articleId },
       // connect again
-      connectOrCreate: input.tagList.map((name) => {
+      create: input.tagList.map((name) => {
         return {
-          where: {
-            name,
-          },
-          create: {
-            name,
+          tag: {
+            connectOrCreate: {
+              where: { name },
+              create: { name },
+            },
           },
         };
       }),
     },
-    slug: slugify(input.title),
+    slug: Utility.slugify(input.title),
     updatedAt: new Date(),
   });
 };
@@ -207,7 +207,7 @@ export const feedQueryFilter = (userId: number) => {
   return Prisma.validator<Prisma.ArticleWhereInput>()({
     del: false,
     author: {
-      followedBy: { some: { id: userId } },
+      followedBy: { some: { followerId: userId } },
     },
   });
 };
@@ -223,13 +223,6 @@ export const articleWrapper = (article) => {
     },
     favoritesCount: _count.favoritedBy,
     favorited: Array.isArray(favoritedBy) && !!favoritedBy.length,
-    tagList: tags.map((t) => t.name),
+    tagList: tags.map((t) => t.tag.name),
   };
 };
-
-function slugify(title: string) {
-  return `${slug(title, { lower: true })}-${(
-    (Math.random() * Math.pow(36, 6)) |
-    0
-  ).toString(36)}`;
-}

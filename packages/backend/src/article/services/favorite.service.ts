@@ -9,7 +9,7 @@ export class FavoriteService extends BaseArticleService {
       where: { slug },
       data: {
         favoritedBy: {
-          connect: { id: this.req.user.id },
+          create: [{ favoritedBy: { connect: { id: this.req.user.id } } }],
         },
       },
       select: articleSelect(this.req.user.id),
@@ -19,13 +19,18 @@ export class FavoriteService extends BaseArticleService {
   }
 
   async unfavorite(slug: string): Promise<any> {
-    await this.checkArticle(slug);
+    const origin = await this.checkArticle(slug);
 
     const article = await this.prisma.article.update({
       where: { slug },
       data: {
         favoritedBy: {
-          disconnect: { id: this.req.user.id },
+          delete: {
+            articleId_userId: {
+              articleId: origin.id,
+              userId: this.req.user.id,
+            },
+          },
         },
       },
       select: articleSelect(this.req.user.id),

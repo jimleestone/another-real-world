@@ -76,7 +76,7 @@ export class ArticleService extends BaseArticleService {
       throw new ForbiddenException('You are not the author of this article');
 
     // init update data
-    const data = updateArticleInput(input);
+    const data = updateArticleInput(origin.id, input);
     if (origin.title === input.title) {
       // if title not changed remove title together with slug
       delete data['title'];
@@ -102,20 +102,12 @@ export class ArticleService extends BaseArticleService {
       where: { slug },
       data: {
         del: true,
-        tags: {
-          set: [],
-        },
-        favoritedBy: {
-          set: [],
-        },
+        tags: { deleteMany: { articleId: origin.id } },
+        favoritedBy: { deleteMany: { articleId: origin.id } },
         comments: {
           updateMany: {
-            where: {
-              del: false,
-            },
-            data: {
-              del: true,
-            },
+            where: { del: false },
+            data: { del: true },
           },
         },
       },

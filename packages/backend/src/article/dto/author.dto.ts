@@ -14,10 +14,8 @@ export const authorSelect = (userId: number) => {
     image: true,
     // when not logged in do not query this field
     followedBy: !!userId && {
-      select: { id: true },
-      where: {
-        id: userId,
-      },
+      select: { follower: true },
+      where: { followerId: userId },
     },
   });
 };

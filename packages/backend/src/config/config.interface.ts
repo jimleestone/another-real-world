@@ -1,4 +1,4 @@
-export type EnvType = 'dev' | 'test' | 'prod';
+export type EnvType = 'dev' | 'test' | 'prod' | 'debug';
 
 export interface ServerOptions {
   port: number;

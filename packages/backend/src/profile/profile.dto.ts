@@ -16,10 +16,7 @@ export const profileSelect = (userId: number) => {
     bio: true,
     image: true,
     followedBy: !!userId && {
-      select: { id: true },
-      where: {
-        id: userId,
-      },
+      where: { followerId: userId },
     },
   });
 };

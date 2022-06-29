@@ -31,9 +31,7 @@ export class ProfileService {
       where: { id: this.req.user.id },
       data: {
         following: {
-          connect: {
-            id: following.id,
-          },
+          create: [{ following: { connect: { id: following.id } } }],
         },
       },
     });
@@ -56,8 +54,11 @@ export class ProfileService {
       where: { id: this.req.user.id },
       data: {
         following: {
-          disconnect: {
-            id: following.id,
+          delete: {
+            followerId_followingId: {
+              followerId: this.req.user.id,
+              followingId: following.id,
+            },
           },
         },
       },

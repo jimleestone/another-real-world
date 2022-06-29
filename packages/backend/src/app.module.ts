@@ -1,9 +1,9 @@
 import { Module } from '@nestjs/common';
-import { ConfigService } from '@nestjs/config';
-
-import { ConfigModule } from '@nestjs/config';
+import { ConfigModule, ConfigService } from '@nestjs/config';
 import { APP_GUARD, APP_INTERCEPTOR } from '@nestjs/core';
+import { ServeStaticModule } from '@nestjs/serve-static';
 import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
+import { join } from 'path';
 import { ArticleModule } from './article/article.module';
 import { AuthModule } from './auth/auth.module';
 import configuration from './config/configuration';
@@ -13,6 +13,9 @@ import { TagModule } from './tag/tag.module';
 import { UserModule } from './user/user.module';
 @Module({
   imports: [
+    ServeStaticModule.forRoot({
+      rootPath: join(__dirname, '..', '..', 'frontend', 'build'),
+    }),
     ConfigModule.forRoot({
       isGlobal: true,
       cache: true,
