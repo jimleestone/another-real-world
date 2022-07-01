@@ -11,9 +11,10 @@
   ],
   "scripts": {
     "prepare": "husky install",
-    "build": "yarn workspaces foreach -v -t run build",
-    "lint": "yarn workspaces foreach -v -t run lint",
-    "prettier:check": "yarn workspaces foreach -v -t run prettier:check"
+    "build": "yarn workspaces foreach -ptv run build",
+    "lint": "yarn workspaces foreach -ptv run lint",
+    "prettier:check": "yarn workspaces foreach -ptv run prettier:check",
+    "start": "yarn workspaces foreach -tv --include backend run start:prod"
   },
   "devDependencies": {
     "@types/jest": "^28.1.0",

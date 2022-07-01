@@ -1,4 +1,4 @@
 export default {
-  baseApiUrl: 'http://localhost:4000/api/',
+  baseApiUrl: 'http://localhost:3000/api/',
   tokenPrefix: 'Bearer',
 };

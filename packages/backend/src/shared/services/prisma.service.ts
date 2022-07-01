@@ -17,6 +17,11 @@ export class PrismaService
 
   constructor(private readonly config: ConfigService) {
     super({
+      datasources: {
+        db: {
+          url: config.get('database.url'),
+        },
+      },
       log: [
         {
           emit: 'event',
