@@ -13,9 +13,9 @@ import { TagModule } from './tag/tag.module';
 import { UserModule } from './user/user.module';
 @Module({
   imports: [
-    ServeStaticModule.forRoot({
-      rootPath: join(__dirname, '..', '..', 'frontend', 'build'),
-    }),
+    // ServeStaticModule.forRoot({
+    //   rootPath: join(__dirname, '..', '..', 'frontend', 'build'),
+    // }),
     ConfigModule.forRoot({
       isGlobal: true,
       cache: true,

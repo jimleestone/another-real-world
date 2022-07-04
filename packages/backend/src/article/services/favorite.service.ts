@@ -8,6 +8,9 @@ export class FavoriteService extends BaseArticleService {
     const article = await this.prisma.article.update({
       where: { slug },
       data: {
+        favoritesCount: {
+          increment: 1,
+        },
         favoritedBy: {
           create: [{ favoritedBy: { connect: { id: this.req.user.id } } }],
         },
@@ -24,6 +27,9 @@ export class FavoriteService extends BaseArticleService {
     const article = await this.prisma.article.update({
       where: { slug },
       data: {
+        favoritesCount: {
+          decrement: 1,
+        },
         favoritedBy: {
           delete: {
             articleId_userId: {

@@ -37,19 +37,20 @@ model Follows {
 }
 
 model Article {
-  id          Int            @id @default(autoincrement())
-  slug        String         @unique
-  title       String
-  description String
-  body        String         @db.Text
-  createdAt   DateTime       @default(now()) @map("created_at")
-  updatedAt   DateTime       @default(now()) @map("updated_at")
-  tags        ArticlesTags[]
-  author      User           @relation(fields: [authorId], references: [id])
-  authorId    Int            @map("author_id")
-  favoritedBy Favorites[]
-  comments    Comment[]
-  del         Boolean        @default(false)
+  id             Int            @id @default(autoincrement())
+  slug           String         @unique
+  title          String
+  description    String
+  body           String         @db.Text
+  createdAt      DateTime       @default(now()) @map("created_at")
+  updatedAt      DateTime       @default(now()) @map("updated_at")
+  tags           ArticlesTags[]
+  author         User           @relation(fields: [authorId], references: [id])
+  authorId       Int            @map("author_id")
+  favoritedBy    Favorites[]
+  comments       Comment[]
+  del            Boolean        @default(false)
+  favoritesCount Int            @default(0) @map("favorites_count")
 
   @@map("blog_article")
 }

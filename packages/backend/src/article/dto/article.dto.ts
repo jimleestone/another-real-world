@@ -140,15 +140,13 @@ export const articleSelect = (userId: number) => {
     body: true,
     createdAt: true,
     updatedAt: true,
+    favoritesCount: true,
     author: {
       select: authorSelect(userId),
     },
     favoritedBy: !!userId && {
       select: { favoritedBy: true },
       where: { userId },
-    },
-    _count: {
-      select: { favoritedBy: true },
     },
     tags: { select: { tag: { select: { name: true } } } },
   });
@@ -213,7 +211,7 @@ export const feedQueryFilter = (userId: number) => {
 };
 
 export const articleWrapper = (article) => {
-  const { _count, favoritedBy, tags, ...rest } = article;
+  const { favoritedBy, tags, ...rest } = article;
   const { followedBy, ...authorRest } = article.author;
   return {
     ...rest,
@@ -221,7 +219,6 @@ export const articleWrapper = (article) => {
       ...authorRest,
       following: Array.isArray(followedBy) && !!followedBy.length,
     },
-    favoritesCount: _count.favoritedBy,
     favorited: Array.isArray(favoritedBy) && !!favoritedBy.length,
     tagList: tags.map((t) => t.tag.name),
   };
